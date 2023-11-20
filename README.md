@@ -1,4 +1,6 @@
 # forkify App
 
 Recipe application, where user can upload recipes to their local storage.
-App fetches recipes from external API.
+User can also search for keywords, like 'pizza', and the app will fetch recipes that match the query from external API.
+App has bookmarking functionality.
+App was built using MVC infrastructure.
