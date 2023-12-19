@@ -7,19 +7,8 @@ import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
 
-// import icons from '../img/icons.svg'; // Parcel 1
-// import icons from 'url:../img/icons.svg'; // Parcel 2
-import 'core-js/stable'; // Polyfill everything else
-import 'regenerator-runtime/runtime'; // Polyfill async await
-import { getJSON } from './helpers.js';
-
-// if (module.hot) {
-//   module.hot.accept();
-// }
-
-const recipeContainer = document.querySelector('.recipe');
-
-// https://forkify-api.herokuapp.com/v2
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 ///////////////////////////////////////
 
@@ -50,7 +39,6 @@ const controlRecipes = async function () {
 const controlSearchResults = async function () {
   try {
     resultsView.renderSpinner();
-    console.log(resultsView);
 
     // 1. Get search query
     const query = searchView.getQuery();
@@ -60,19 +48,17 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // 3. Render results
-    // resultsView.render(model.state.search.results);
     resultsView.render(model.getSearchResultsPage());
 
     // 4. Render initial pagination buttons
     paginationView.render(model.state.search);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
 const controlPagination = function (goToPage) {
   // 1. Render new results
-  // resultsView.render(model.state.search.results);
   resultsView.render(model.getSearchResultsPage(goToPage));
 
   // 2. Render new pagination buttons
@@ -84,7 +70,6 @@ const controlServings = function (newServings) {
   model.updateServings(newServings);
 
   // Update the recipe view
-  // recipeView.render(model.state.recipe);
   recipeView.update(model.state.recipe);
 };
 
@@ -96,7 +81,6 @@ const controlAddBookmark = function () {
     model.deleteBookmark(model.state.recipe.id);
   }
 
-  // console.log(model.state.recipe);
   // 2. Update recipe view
   recipeView.update(model.state.recipe);
 
@@ -109,14 +93,12 @@ const controlBookmarks = function () {
 };
 
 const controlAddRecipe = async function (newRecipe) {
-  // console.log(newRecipe);
   try {
     // Show loading spinner
     addRecipeView.renderSpinner();
 
     // Upload new recipe data
     await model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
 
     // Render new recipe
     recipeView.render(model.state.recipe);
@@ -135,7 +117,7 @@ const controlAddRecipe = async function (newRecipe) {
       addRecipeView.toggleWindow();
     }, MODAL_CLOSE_SEC * 1000);
   } catch (err) {
-    console.error('😂😂', err);
+    console.error('controlAddRecipe error', err);
     addRecipeView.renderError(err.message);
   }
 

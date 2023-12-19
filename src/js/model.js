@@ -39,8 +39,7 @@ export const loadRecipe = async function (id) {
 
     console.log(state.recipe);
   } catch (err) {
-    // Temp error handling
-    console.error(`${err} 🤣😂😁`);
+    console.error(`${err} loadRecipe`);
     throw err;
   }
 };
@@ -62,7 +61,7 @@ export const loadSearchResults = async function (query) {
     });
     state.search.page = 1;
   } catch (err) {
-    console.error(`${err} 🤣😂😁`);
+    console.error(`${err} loadSearchResults`);
     throw err;
   }
 };
@@ -128,7 +127,6 @@ export const uploadRecipe = async function (newRecipe) {
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ingredient => {
-        // const ingArr = ingredient[1].replaceAll(' ', '').split(',');
         const ingArr = ingredient[1].split(',').map(el => el.trim());
         if (ingArr.length !== 3)
           throw new Error(
@@ -137,7 +135,6 @@ export const uploadRecipe = async function (newRecipe) {
         const [quantity, unit, description] = ingArr;
         return { quantity: quantity ? +quantity : null, unit, description };
       });
-    // console.log(ingredients);
 
     const recipe = {
       title: newRecipe.title,
@@ -148,10 +145,7 @@ export const uploadRecipe = async function (newRecipe) {
       servings: +newRecipe.servings,
       ingredients,
     };
-
-    // console.log(recipe);
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
-    // console.log(data);
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {
